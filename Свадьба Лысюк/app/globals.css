@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@200;300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════
+   DARK THEME (default)
+══════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  --bg:           #1a1a1a;
+  --bg-2:         #161616;
+  --bg-3:         #111111;
+  --fg:           #f8f5f0;
+  --fg-80:        rgba(248,245,240,0.8);
+  --fg-50:        rgba(248,245,240,0.5);
+  --fg-30:        rgba(248,245,240,0.3);
+  --fg-15:        rgba(248,245,240,0.15);
+  --fg-08:        rgba(248,245,240,0.08);
+  --border:       rgba(248,245,240,0.1);
+  --glass-bg:     rgba(248,245,240,0.04);
+  --glass-border: rgba(248,245,240,0.1);
+}
+
+/* ══════════════════════════════════════
+   LIGHT THEME
+══════════════════════════════════════ */
+[data-theme="light"] {
+  --bg:           #f5f0eb;
+  --bg-2:         #ede8e1;
+  --bg-3:         #e5dfd7;
+  --fg:           #1a1a1a;
+  --fg-80:        rgba(26,26,26,0.8);
+  --fg-50:        rgba(26,26,26,0.5);
+  --fg-30:        rgba(26,26,26,0.3);
+  --fg-15:        rgba(26,26,26,0.15);
+  --fg-08:        rgba(26,26,26,0.08);
+  --border:       rgba(26,26,26,0.1);
+  --glass-bg:     rgba(26,26,26,0.04);
+  --glass-border: rgba(26,26,26,0.12);
+}
+
+/* ══════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Theme transition on root — всё меняется плавно */
+html {
+  transition: background-color 0.6s ease;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+/* Все цвета переходят плавно при смене темы */
+section, div, p, h1, h2, h3, h4, span, a, button, input, textarea, select, label, svg {
+  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease,
+              fill 0.6s ease, background 0.6s ease;
+}
+
+section { overflow: hidden; }
+
+/* ══════════════════════════════════════
+   SECTION TRANSITIONS
+══════════════════════════════════════ */
+.section-fade-top {
+  position: relative;
+}
+.section-fade-top::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, var(--bg), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+.section-fade-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   SECTION BACKGROUNDS
+══════════════════════════════════════ */
+.bg-section   { background-color: var(--bg)   !important; }
+.bg-section-2 { background-color: var(--bg-2) !important; }
+.bg-section-3 { background-color: var(--bg-3) !important; }
+
+/* ══════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════ */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--fg-15); border-radius: 2px; }
+
+::selection { background: rgba(128,100,80,0.2); }
+
+/* ══════════════════════════════════════
+   GLASS
+══════════════════════════════════════ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ══════════════════════════════════════
+   CURSOR
+══════════════════════════════════════ */
+@media (pointer: fine) {
+  *:not(canvas) { cursor: none !important; }
+}
+
+/* Prevent iOS tap highlight and font size zoom on inputs */
+input, textarea, select, button {
+  -webkit-tap-highlight-color: transparent;
+}
+@media screen and (max-width: 768px) {
+  input, textarea {
+    font-size: 16px !important; /* prevents iOS zoom on focus */
+  }
+}
