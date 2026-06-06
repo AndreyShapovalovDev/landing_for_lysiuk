@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { MapPin, Navigation, ExternalLink } from "lucide-react";
 
 const VENUE = {
@@ -14,11 +14,16 @@ const VENUE = {
 };
 
 export default function LocationSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "center center"] });
+  const headingScale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
+  const headingY     = useTransform(scrollYProgress, [0, 1], [40, 0]);
+
   return (
-    <section id="location" className="relative py-32 md:py-48 px-8 md:px-16 lg:px-24 bg-section overflow-hidden">
+    <section id="location" ref={sectionRef} className="relative py-32 md:py-48 px-8 md:px-16 lg:px-24 bg-section overflow-hidden">
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none"
         style={{ backgroundImage: "repeating-linear-gradient(0deg,var(--fg) 0px,var(--fg) 1px,transparent 1px,transparent 80px),repeating-linear-gradient(90deg,var(--fg) 0px,var(--fg) 1px,transparent 1px,transparent 80px)" }} />
       <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10"
@@ -27,8 +32,7 @@ export default function LocationSection() {
       <motion.div ref={ref} initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.8 }} className="relative max-w-6xl mx-auto">
 
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} className="mb-16 md:mb-24">
+        <motion.div style={{ scale: headingScale, y: headingY }} className="mb-16 md:mb-24">
           <p className="text-[10px] tracking-[0.45em] uppercase mb-6 font-light"
             style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
             Место проведения

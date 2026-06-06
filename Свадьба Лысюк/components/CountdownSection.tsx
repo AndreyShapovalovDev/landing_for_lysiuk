@@ -81,8 +81,10 @@ export default function CountdownSection() {
 
   return (
     <section ref={sectionRef} className="relative py-32 md:py-48 bg-section-3 overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, var(--fg-08), transparent)" }} />
-      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, var(--fg-08), transparent)" }} />
+      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10"
+        style={{ background: "linear-gradient(to bottom, var(--bg-2), transparent)" }} />
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
+        style={{ background: "linear-gradient(to top, var(--bg), transparent)" }} />
 
       {/* Large bg text */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden>

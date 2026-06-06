@@ -98,22 +98,29 @@ export default function RsvpSection() {
           {!submitted ? (
             <motion.form
               key="form" onSubmit={handleSubmit}
-              initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.4 }}
               className="flex flex-col gap-10"
             >
               {/* ФИО */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
                   ФИО *
                 </label>
                 <input type="text" value={name} onChange={e => setName(e.target.value)}
                   placeholder="Фамилия Имя Отчество" required style={inputStyle} />
-              </div>
+              </motion.div>
 
               {/* Присутствие */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
                   Сможете ли присутствовать? *
                 </label>
@@ -130,7 +137,7 @@ export default function RsvpSection() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Количество гостей */}
               <AnimatePresence>
@@ -186,18 +193,25 @@ export default function RsvpSection() {
               </AnimatePresence>
 
               {/* Пожелания */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
                   Пожелания молодожёнам
                 </label>
                 <textarea value={comment} onChange={e => setComment(e.target.value)}
                   placeholder="Необязательно..." rows={3}
                   style={{ ...inputStyle, resize: "none" }} />
-              </div>
+              </motion.div>
 
               {/* Submit */}
               <motion.button
                 type="submit" disabled={submitting || !name || !attending}
+                initial={{ opacity: 0, y: 16 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 whileHover={{ scale: 1.005 }} whileTap={{ scale: 0.995 }}
                 className="relative w-full py-4 text-[10px] tracking-[0.35em] uppercase font-light transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden group mt-2"
                 style={{ fontFamily: "'Inter', sans-serif", border: "1px solid var(--border)", color: "var(--fg-50)" }}
