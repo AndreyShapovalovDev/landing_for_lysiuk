@@ -33,7 +33,7 @@ export default function ThemeToggle() {
       aria-label="Переключить тему"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, delay: 2.5 }}
+      transition={{ duration: 0.4, delay: 4.2 }}
       className="fixed top-5 right-16 z-[9992] w-11 h-11 rounded-full flex items-center justify-center"
       style={{
         background: isDark ? "rgba(248,245,240,0.1)" : "rgba(26,26,26,0.1)",

@@ -3,8 +3,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 
-const E: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
 const phrases = [
   { eyebrow: "Начало",         line1: "Мы познакомились", line2: "совсем случайно...",    ambient: "01", side: "left"  as const },
   { eyebrow: "Момент",         line1: "И поняли —",        line2: "это навсегда",          ambient: "02", side: "right" as const },

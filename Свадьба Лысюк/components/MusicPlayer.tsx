@@ -18,7 +18,7 @@ export default function MusicPlayer() {
     audioRef.current = audio;
 
     // Показываем popup через 3.5 сек
-    const t = setTimeout(() => setShown(true), 3500);
+    const t = setTimeout(() => setShown(true), 4800);
 
     return () => {
       clearTimeout(t);
@@ -146,7 +146,7 @@ export default function MusicPlayer() {
         whileTap={{ scale: 0.92 }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, delay: 3 }}
+        transition={{ duration: 0.4, delay: 4.4 }}
       >
         {/* Пульс когда играет */}
         <AnimatePresence>
