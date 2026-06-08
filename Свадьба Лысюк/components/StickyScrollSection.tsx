@@ -1,0 +1,156 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+
+const E: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const phrases = [
+  { eyebrow: "Начало",         line1: "Мы познакомились", line2: "совсем случайно...",    ambient: "01", side: "left"  as const },
+  { eyebrow: "Момент",         line1: "И поняли —",        line2: "это навсегда",          ambient: "02", side: "right" as const },
+  { eyebrow: "07 · 09 · 2026", line1: "Теперь мы хотим",  line2: "разделить это с вами",  ambient: "03", side: "left"  as const },
+];
+
+function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: false, margin: "-15% 0px -15% 0px" });
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  // Ambient число — сильный горизонтальный drift + вертикальный + scale
+  const ambientX = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    phrase.side === "left" ? ["-18%", "0%", "18%"] : ["18%", "0%", "-18%"]
+  );
+  const ambientY     = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const ambientScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.82, 1.0, 0.82]);
+
+  // Текст — line1 движется чуть быстрее чем line2 (разная глубина)
+  const line1Y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
+  const line2Y = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
+
+  // Eyebrow — самый медленный слой
+  const eyebrowY = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        minHeight: "88vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "6vh clamp(1.5rem, 6vw, 8rem)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Ambient число — scroll-linked drift + scale */}
+      <motion.div
+        aria-hidden
+        style={{
+          position: "absolute",
+          [phrase.side]: "-0.1em",
+          top: "50%",
+          x: ambientX,
+          y: ambientY,
+          scale: ambientScale,
+          translateY: "-50%",
+          fontFamily: "'Cormorant Garamond', serif",
+          fontWeight: 300,
+          fontStyle: "italic",
+          fontSize: "clamp(18rem, 42vw, 38rem)",
+          lineHeight: 0.85,
+          letterSpacing: "-0.05em",
+          color: "var(--fg)",
+          opacity: inView ? 1 : 0,
+          transition: "opacity 1s ease",
+          userSelect: "none",
+          pointerEvents: "none",
+          WebkitMaskImage: phrase.side === "left"
+            ? "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 60%)"
+            : "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.15) 60%)",
+          maskImage: phrase.side === "left"
+            ? "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 60%)"
+            : "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.15) 60%)",
+        }}
+      >
+        {phrase.ambient}
+      </motion.div>
+
+      {/* Content — три слоя с разной скоростью */}
+      <div style={{ textAlign: "center", width: "100%", position: "relative", zIndex: 1 }}>
+
+        {/* Eyebrow — медленный слой */}
+        <motion.p
+          style={{
+            y: eyebrowY,
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "10px",
+            letterSpacing: "0.5em",
+            textTransform: "uppercase",
+            color: "var(--fg-30)",
+            fontWeight: 300,
+            marginBottom: "clamp(1.5rem, 4vw, 3rem)",
+          }}
+          animate={{ opacity: inView ? 1 : 0 }}
+          transition={{ duration: 0.8, delay: 0.05 }}
+        >
+          {phrase.eyebrow}
+        </motion.p>
+
+        {/* Line 1 — средний слой */}
+        <motion.div style={{ y: line1Y, overflow: "hidden" }}>
+          <motion.div
+            animate={{ y: inView ? "0%" : "108%" }}
+            transition={{ duration: 0.9, delay: 0.08, ease: E }}
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              fontStyle: "italic",
+              fontSize: "clamp(3.5rem, 14vw, 13rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.03em",
+              color: "var(--fg)",
+            }}
+          >
+            {phrase.line1}
+          </motion.div>
+        </motion.div>
+
+        {/* Line 2 — быстрый слой — создаёт разрыв глубины */}
+        <motion.div style={{ y: line2Y, overflow: "hidden" }}>
+          <motion.div
+            animate={{ y: inView ? "0%" : "108%" }}
+            transition={{ duration: 0.9, delay: 0.18, ease: E }}
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              fontStyle: "italic",
+              fontSize: "clamp(3.5rem, 14vw, 13rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.03em",
+              color: "var(--fg-30)",
+            }}
+          >
+            {phrase.line2}
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+export default function StickyScrollSection() {
+  return (
+    <section style={{ backgroundColor: "var(--bg)", overflow: "hidden" }}>
+      {phrases.map((phrase, i) => (
+        <PhraseBlock key={i} phrase={phrase} />
+      ))}
+    </section>
+  );
+}
