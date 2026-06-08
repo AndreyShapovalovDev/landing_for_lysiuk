@@ -23,15 +23,30 @@ export default function RsvpSection() {
     e.preventDefault();
     if (!name || !attending) return;
     setSubmitting(true);
-    // TODO: подключить Formspree / Google Sheets / Telegram бот
-    // await fetch("https://formspree.io/f/YOUR_ID", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ name, attending, guestCount, comment }),
-    // });
-    await new Promise((r) => setTimeout(r, 1200));
-    setSubmitting(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          attending,
+          guestCount,
+          companions,
+          comment,
+          clientMeta: {
+            screenSize: `${window.screen.width}×${window.screen.height}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Ошибка сервера");
+    } catch (err) {
+      console.error("[RSVP]", err);
+    } finally {
+      setSubmitting(false);
+      setSubmitted(true);
+    }
   };
 
   const labelClass = "block text-[9px] tracking-[0.38em] uppercase mb-3 font-light";
