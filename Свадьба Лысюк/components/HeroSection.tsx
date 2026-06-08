@@ -16,6 +16,12 @@ export default function HeroSection() {
 
       {/* Background photo */}
       <motion.div className="absolute inset-0 w-full h-[115%]" style={{ y: bgY }}>
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1.0 }}
+          transition={{ duration: 20, ease: "linear" }}
+        >
         <Image
           src="/hero.jpg"
           alt="Данил и Софья"
@@ -23,6 +29,7 @@ export default function HeroSection() {
           className="object-cover object-center"
           style={{ filter: "grayscale(25%) brightness(0.55)" }}
         />
+        </motion.div>
         {/* Gradient */}
         <div className="absolute inset-0" style={{
           background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.95) 100%)"

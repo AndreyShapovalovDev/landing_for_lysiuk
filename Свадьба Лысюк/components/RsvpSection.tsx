@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
+import FloatingInput from "./FloatingInput";
 
 type AttendingOption = "yes" | "no" | "";
 
@@ -108,11 +109,7 @@ export default function RsvpSection() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
-                <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
-                  ФИО *
-                </label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)}
-                  placeholder="Фамилия Имя Отчество" required style={inputStyle} />
+                <FloatingInput label="Фамилия Имя Отчество" value={name} onChange={setName} required />
               </motion.div>
 
               {/* Присутствие */}
@@ -172,19 +169,11 @@ export default function RsvpSection() {
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.35 }}
                         >
-                          <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
-                            Кто придёт с вами? *
-                          </label>
-                          <input
-                            type="text"
+                          <FloatingInput
+                            label="Кто придёт с вами"
                             value={companions}
-                            onChange={e => setCompanions(e.target.value)}
-                            placeholder="Имена через запятую: Мария, Сергей..."
-                            style={inputStyle}
+                            onChange={setCompanions}
                           />
-                          <p className="mt-2 text-[10px] font-light" style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-15)" }}>
-                            Укажите имена всех, кто придёт вместе с вами
-                          </p>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -198,12 +187,13 @@ export default function RsvpSection() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
               >
-                <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
-                  Пожелания молодожёнам
-                </label>
-                <textarea value={comment} onChange={e => setComment(e.target.value)}
-                  placeholder="Необязательно..." rows={3}
-                  style={{ ...inputStyle, resize: "none" }} />
+                <FloatingInput
+                  label="Пожелания молодожёнам"
+                  value={comment}
+                  onChange={setComment}
+                  multiline
+                  rows={3}
+                />
               </motion.div>
 
               {/* Submit */}
@@ -252,19 +242,22 @@ export default function RsvpSection() {
           className="mt-20 pt-10 flex flex-col gap-5"
           style={{ borderTop: "1px solid var(--border)" }}
         >
-          <p className="text-[9px] tracking-[0.38em] uppercase text-center font-light"
-            style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
-            Небольшие пожелания
+          <p
+            className="text-center font-light mb-2"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic",
+              fontSize: "1.4rem", color: "var(--fg-50)", letterSpacing: "0.01em" }}
+          >
+            Несколько слов от нас
           </p>
           {[
-            "Будем очень признательны, если вы воздержитесь от криков «Горько». Поцелуй — это знак искренних чувств, и он не может быть по заказу.",
-            "Пожалуйста, не дарите нам цветы — мы не успеем насладиться их красотой. Если хотите порадовать нас — будем благодарны за вклад в бюджет нашей молодой семьи.",
+            "Поцелуй рождается сам — из взгляда, из момента, из чувства. Мы будем рады провести этот вечер без командного «горько».",
+            "Цветы прекрасны, но недолговечны. Если хочется сделать нам приятное — будем благодарны за вклад в жизнь нашей семьи.",
           ].map((wish, i) => (
             <div key={i} className="flex items-start gap-4">
               <div className="w-px h-4 mt-1.5 flex-shrink-0" style={{ background: "var(--fg-15)" }} />
               <p className="font-light leading-relaxed"
                 style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic",
-                  color: "var(--fg-50)", fontSize: "1.05rem", lineHeight: "1.75" }}>
+                  color: "var(--fg-30)", fontSize: "1rem", lineHeight: "1.8" }}>
                 {wish}
               </p>
             </div>

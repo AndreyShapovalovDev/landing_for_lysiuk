@@ -96,33 +96,87 @@ export default function CountdownSection() {
         </span>
       </div>
 
-      <div className="relative px-8 md:px-16 text-center">
+      <div className="relative px-8 md:px-16">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9 }}
-          className="text-[10px] tracking-[0.45em] uppercase mb-16 md:mb-24 font-light"
+          className="text-[10px] tracking-[0.45em] uppercase mb-16 md:mb-20 font-light text-center"
           style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}
         >
           До особого дня
         </motion.p>
 
-        {/* Desktop: одна строка */}
-        <div className="hidden sm:flex items-start justify-center gap-6 md:gap-10 lg:gap-16">
-          <Unit value={timeLeft.days}    label="Дней"   delay={0}   />
-          {sep(0.3)}
-          <Unit value={timeLeft.hours}   label="Часов"  delay={0.1} />
-          {sep(0.35)}
-          <Unit value={timeLeft.minutes} label="Минут"  delay={0.2} />
-          {sep(0.4)}
-          <Unit value={timeLeft.seconds} label="Секунд" delay={0.3} />
+        {/* Desktop: дни большие слева, остальные справа меньше */}
+        <div className="hidden sm:flex items-end justify-center gap-12 md:gap-20">
+          {/* Дни — доминирующий элемент */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-end"
+          >
+            <motion.span
+              key={timeLeft.days}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 300,
+                fontSize: "clamp(6rem, 18vw, 14rem)",
+                lineHeight: 0.9,
+                letterSpacing: "-0.03em",
+                color: "var(--fg)",
+              }}
+            >
+              {String(timeLeft.days).padStart(2, "0")}
+            </motion.span>
+            <span className="text-[10px] tracking-[0.45em] uppercase font-light mt-4"
+              style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
+              дней
+            </span>
+          </motion.div>
+
+          {/* Разделитель */}
+          <div className="flex flex-col pb-8" style={{ color: "var(--fg-15)", fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem,4vw,3.5rem)", fontWeight: 300 }}>:</div>
+
+          {/* Часы · Минуты · Секунды — меньше */}
+          <div className="flex items-end gap-6 md:gap-8 pb-2">
+            <Unit value={timeLeft.hours}   label="Часов"  delay={0.1} />
+            {sep(0.35)}
+            <Unit value={timeLeft.minutes} label="Минут"  delay={0.2} />
+            {sep(0.4)}
+            <Unit value={timeLeft.seconds} label="Секунд" delay={0.3} />
+          </div>
         </div>
-        {/* Mobile: сетка 2×2 */}
-        <div className="sm:hidden grid grid-cols-2 gap-x-8 gap-y-10 max-w-[280px] mx-auto">
-          <Unit value={timeLeft.days}    label="Дней"   delay={0}   />
-          <Unit value={timeLeft.hours}   label="Часов"  delay={0.1} />
-          <Unit value={timeLeft.minutes} label="Минут"  delay={0.2} />
-          <Unit value={timeLeft.seconds} label="Секунд" delay={0.3} />
+
+        {/* Mobile: дни большие, остальные под ним */}
+        <div className="sm:hidden flex flex-col items-center gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center"
+          >
+            <motion.span
+              key={timeLeft.days}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300,
+                fontSize: "clamp(5rem,28vw,9rem)", lineHeight: 0.9, letterSpacing: "-0.03em", color: "var(--fg)" }}
+            >
+              {String(timeLeft.days).padStart(2, "0")}
+            </motion.span>
+            <p className="text-[9px] tracking-[0.4em] uppercase font-light mt-3"
+              style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>дней</p>
+          </motion.div>
+          <div className="flex items-start gap-6">
+            <Unit value={timeLeft.hours}   label="Часов"  delay={0.1} />
+            <Unit value={timeLeft.minutes} label="Минут"  delay={0.2} />
+            <Unit value={timeLeft.seconds} label="Секунд" delay={0.3} />
+          </div>
         </div>
 
         <motion.p

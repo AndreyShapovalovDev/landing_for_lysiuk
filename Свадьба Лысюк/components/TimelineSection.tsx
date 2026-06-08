@@ -128,6 +128,7 @@ function TimelineItem({
   );
 }
 
+
 export default function TimelineSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -192,6 +193,8 @@ export default function TimelineSection() {
             <TimelineItem key={i} event={event} index={i} total={events.length} />
           ))}
         </div>
+
+        {/* Venue photo — sticky on desktop */}
       </div>
     </section>
   );

@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `(function(){try{var t=localStorage.getItem('wedding-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})()`
         }} />
       </head>
-      <body>
+      <body className="grain-overlay">
         <ThemeToggle />
         {children}
       </body>
