@@ -1,9 +1,28 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import RingGame from "@/components/RingGame";
-import RevealText from "./RevealText";
+
+function LetterStagger({ text, inView, delay = 0, style }: {
+  text: string; inView: boolean; delay?: number; style?: React.CSSProperties;
+}) {
+  return (
+    <span style={{ display: "inline" }}>
+      {text.split("").map((ch, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+          transition={{ duration: 0.65, delay: delay + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+          style={{ display: ch === " " ? "inline" : "inline-block", ...style }}
+        >
+          {ch === " " ? " " : ch}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
 
 export default function FinalSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,33 +65,42 @@ export default function FinalSection() {
 
       {/* Content */}
       <motion.div className="relative z-10 text-center px-8 md:px-16" style={{ y: textY }}>
+        {/* Monogram with glow halo */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.85 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12"
+          transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-12 relative flex items-center justify-center"
         >
+          {/* Halo */}
+          <motion.div
+            className="absolute rounded-full pointer-events-none"
+            style={{ width: 180, height: 180, background: "radial-gradient(circle, rgba(248,245,240,0.08) 0%, transparent 70%)" }}
+            animate={inView ? { scale: [1, 1.12, 1], opacity: [0.5, 1, 0.5] } : {}}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
           <span
-            className="text-7xl md:text-9xl"
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, color: "rgba(248,245,240,0.9)" }}
+            className="text-7xl md:text-9xl relative"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              color: "rgba(248,245,240,0.9)",
+              textShadow: "0 0 60px rgba(248,245,240,0.15), 0 0 120px rgba(248,245,240,0.07)",
+            }}
           >
-            D&S
+            <LetterStagger text="D&S" inView={inView} delay={0.2} />
           </span>
         </motion.div>
 
         <div className="mb-8 max-w-2xl mx-auto">
-          <RevealText
-            as="h2"
-            delay={0.2}
-            duration={1.3}
-            once={false}
+          <h2
             className="text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.2]"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: "italic", color: "rgba(248,245,240,0.9)" }}
           >
-            Для нас огромное счастье —
+            <LetterStagger text="Для нас огромное счастье —" inView={inView} delay={0.5} />
             <br />
-            видеть вас рядом в этот день
-          </RevealText>
+            <LetterStagger text="видеть вас рядом в этот день" inView={inView} delay={0.9} />
+          </h2>
         </div>
 
         <motion.div

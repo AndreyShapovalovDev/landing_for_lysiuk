@@ -178,6 +178,14 @@ section { overflow: hidden; }
   z-index: 9997;
 }
 
+/* ══════════════════════════════════════
+   SHIMMER SWIPE
+══════════════════════════════════════ */
+@keyframes shimmer-swipe {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
 /* Prevent iOS tap highlight and font size zoom on inputs */
 input, textarea, select, button {
   -webkit-tap-highlight-color: transparent;

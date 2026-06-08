@@ -135,15 +135,25 @@ export default function DressCodeSection() {
             {palette.map((color, i) => (
               <motion.div
                 key={color.hex}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 1, delay: 0.3 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+                animate={inView ? { clipPath: "inset(0% 0% 0% 0%)" } : {}}
+                transition={{ duration: 0.9, delay: 0.25 + i * 0.1, ease: [0.76, 0, 0.24, 1] }}
                 className="flex flex-col gap-3 group cursor-default"
               >
                 <div
-                  className="w-full aspect-[3/4] rounded-sm transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="w-full aspect-[3/4] rounded-sm transition-transform duration-500 group-hover:scale-[1.03] relative overflow-hidden"
                   style={{ backgroundColor: color.hex }}
-                />
+                >
+                  {/* Shimmer on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)",
+                      transform: "translateX(-100%)",
+                      animation: "shimmer-swipe 0.8s ease forwards",
+                    }}
+                  />
+                </div>
                 <div className="flex flex-col gap-0.5">
                   <span
                     className="text-[9px] tracking-[0.15em] uppercase font-light"

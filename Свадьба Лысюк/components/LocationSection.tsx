@@ -88,7 +88,7 @@ export default function LocationSection() {
           initial={{ opacity: 0, x: -40 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-2xl overflow-hidden max-w-lg"
+          className="relative rounded-2xl overflow-hidden max-w-lg group/card"
           style={{
             background: "var(--glass-bg)",
             backdropFilter: "blur(20px)",
@@ -96,6 +96,16 @@ export default function LocationSection() {
             border: "1px solid var(--glass-border)",
           }}
         >
+          {/* Border shimmer sweep — loops on hover */}
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none z-20"
+            style={{
+              background: "linear-gradient(105deg, transparent 20%, rgba(248,245,240,0.08) 50%, transparent 80%)",
+              backgroundSize: "200% 200%",
+            }}
+            animate={{ backgroundPosition: ["200% 0%", "-200% 0%"] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "linear", repeatDelay: 1.5 }}
+          />
           <div className="p-8 md:p-12 flex flex-col gap-8">
             <div className="w-12 h-12 rounded-full flex items-center justify-center"
               style={{ border: "1px solid var(--fg-15)" }}>

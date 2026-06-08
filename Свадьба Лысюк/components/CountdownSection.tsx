@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
 import RevealText from "./RevealText";
 
 const WEDDING_DATE = new Date("2026-09-07T16:00:00");
@@ -24,9 +24,29 @@ function calcTimeLeft(): TimeLeft {
   };
 }
 
+function FlipDigit({ digit }: { digit: string }) {
+  return (
+    <div className="relative overflow-hidden" style={{ lineHeight: 1 }}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={digit}
+          initial={{ clipPath: "inset(0% 0% 100% 0%)", y: "-30%" }}
+          animate={{ clipPath: "inset(0% 0% 0% 0%)", y: "0%" }}
+          exit={{ clipPath: "inset(100% 0% 0% 0%)", y: "30%" }}
+          transition={{ duration: 0.38, ease: [0.76, 0, 0.24, 1] }}
+          style={{ display: "block" }}
+        >
+          {digit}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function Unit({ value, label, delay }: { value: number; label: string; delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
+  const digits = String(value).padStart(2, "0").split("");
 
   return (
     <motion.div
@@ -36,16 +56,18 @@ function Unit({ value, label, delay }: { value: number; label: string; delay: nu
       transition={{ duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center gap-3 md:gap-5"
     >
-      <motion.span
-        key={value}
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        className="block text-[clamp(3rem,8vw,7rem)] leading-none tabular-nums"
-        style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, letterSpacing: "-0.02em", color: "var(--fg)" }}
+      <div
+        className="flex tabular-nums"
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontWeight: 300,
+          fontSize: "clamp(3rem,8vw,7rem)",
+          letterSpacing: "-0.02em",
+          color: "var(--fg)",
+        }}
       >
-        {String(value).padStart(2, "0")}
-      </motion.span>
+        {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
+      </div>
       <span
         className="text-[9px] md:text-[10px] tracking-[0.4em] uppercase font-light"
         style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}
@@ -57,10 +79,12 @@ function Unit({ value, label, delay }: { value: number; label: string; delay: nu
 }
 
 export default function CountdownSection() {
-  // Начинаем с нулей — сервер и клиент совпадают, потом useEffect обновит
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true });
+
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const bgTextY = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
   useEffect(() => {
     setTimeLeft(calcTimeLeft()); // первый рендер на клиенте
@@ -87,15 +111,19 @@ export default function CountdownSection() {
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
         style={{ background: "linear-gradient(to top, var(--bg), transparent)" }} />
 
-      {/* Large bg text */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden>
+      {/* Large bg text — scroll-linked parallax */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+        aria-hidden
+        style={{ y: bgTextY }}
+      >
         <span
           className="text-[20vw] leading-none"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, color: "var(--fg-08)" }}
         >
           07.09
         </span>
-      </div>
+      </motion.div>
 
       <div className="relative px-8 md:px-16">
         <RevealText
@@ -117,11 +145,8 @@ export default function CountdownSection() {
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-end"
           >
-            <motion.span
-              key={timeLeft.days}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
+            <div
+              className="flex tabular-nums"
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontWeight: 300,
@@ -131,8 +156,10 @@ export default function CountdownSection() {
                 color: "var(--fg)",
               }}
             >
-              {String(timeLeft.days).padStart(2, "0")}
-            </motion.span>
+              {String(timeLeft.days).padStart(2, "0").split("").map((d, i) => (
+                <FlipDigit key={i} digit={d} />
+              ))}
+            </div>
             <span className="text-[10px] tracking-[0.45em] uppercase font-light mt-4"
               style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
               дней
@@ -160,16 +187,15 @@ export default function CountdownSection() {
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-center"
           >
-            <motion.span
-              key={timeLeft.days}
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
+            <div
+              className="flex justify-center tabular-nums"
               style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300,
                 fontSize: "clamp(5rem,28vw,9rem)", lineHeight: 0.9, letterSpacing: "-0.03em", color: "var(--fg)" }}
             >
-              {String(timeLeft.days).padStart(2, "0")}
-            </motion.span>
+              {String(timeLeft.days).padStart(2, "0").split("").map((d, i) => (
+                <FlipDigit key={i} digit={d} />
+              ))}
+            </div>
             <p className="text-[9px] tracking-[0.4em] uppercase font-light mt-3"
               style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>дней</p>
           </motion.div>

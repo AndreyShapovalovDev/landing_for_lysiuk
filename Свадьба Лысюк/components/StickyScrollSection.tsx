@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 
 const E: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -33,6 +33,11 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
 
   // Eyebrow — самый медленный слой
   const eyebrowY = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
+
+  // Blur-to-focus: в центре (0.5) — фокус, на краях — blur
+  const blurPx = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [16, 0, 0, 0, 16]);
+  const blurFilter = useMotionTemplate`blur(${blurPx}px)`;
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5, 0.8, 1], [0, 1, 1, 1, 0]);
 
   return (
     <div
@@ -80,7 +85,16 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
       </motion.div>
 
       {/* Content — три слоя с разной скоростью */}
-      <div style={{ textAlign: "center", width: "100%", position: "relative", zIndex: 1 }}>
+      <motion.div
+        style={{
+          textAlign: "center",
+          width: "100%",
+          position: "relative",
+          zIndex: 1,
+          filter: blurFilter,
+          opacity: contentOpacity,
+        }}
+      >
 
         {/* Eyebrow — медленный слой */}
         <motion.p
@@ -129,7 +143,7 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
         >
           {phrase.line2}
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }

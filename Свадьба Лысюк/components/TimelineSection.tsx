@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
 import RevealText from "./RevealText";
 
 const events = [
@@ -45,6 +45,33 @@ function WordReveal({ text, delay = 0 }: { text: string; delay?: number }) {
         </motion.span>
       ))}
     </span>
+  );
+}
+
+function ScrollLine({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElement | null> }) {
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 0.7", "end 0.8"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 24 });
+  const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
+
+  return (
+    <motion.div
+      aria-hidden
+      style={{
+        position: "absolute",
+        left: "calc(4rem + 1.5rem + 6px)",
+        top: 6,
+        bottom: 80,
+        width: 1,
+        background: "var(--fg-30)",
+        originY: 0,
+        scaleY,
+        zIndex: 0,
+        pointerEvents: "none",
+      }}
+    />
   );
 }
 
@@ -94,13 +121,7 @@ function TimelineItem({
           <div className="w-1 h-1 rounded-full" style={{ background: "var(--fg-30)" }} />
         </motion.div>
         {!isLast && (
-          <motion.div
-            className="w-px flex-1 mt-4"
-            style={{ background: "var(--fg-08)", minHeight: "80px" }}
-            initial={{ scaleY: 0, originY: 0 }}
-            animate={inView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-          />
+          <div className="w-px flex-1 mt-4" style={{ background: "var(--fg-08)", minHeight: "80px" }} />
         )}
       </div>
 
@@ -191,7 +212,9 @@ export default function TimelineSection() {
         </motion.div>
 
         {/* Timeline items */}
-        <div>
+        <div className="relative">
+          {/* Scroll-driven vertical line behind dots */}
+          <ScrollLine sectionRef={sectionRef} />
           {events.map((event, i) => (
             <TimelineItem key={i} event={event} index={i} total={events.length} />
           ))}
