@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import RevealText from "./RevealText";
 
 const events = [
   {
@@ -177,14 +178,16 @@ export default function TimelineSection() {
           >
             07 · 09 · 2026
           </p>
-          <h2
+          <RevealText
+            as="h2"
+            delay={0.1}
             className="text-[clamp(2.5rem,5vw,5rem)] leading-[0.95]"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, color: "var(--fg)" }}
           >
             Программа
             <br />
             <span style={{ fontStyle: "italic", color: "var(--fg-50)" }}>торжественного дня</span>
-          </h2>
+          </RevealText>
         </motion.div>
 
         {/* Timeline items */}

@@ -58,9 +58,9 @@ export default function NavBar() {
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="fixed top-0 left-0 right-0 z-[9988]"
           style={{
-            background: "rgba(var(--bg-rgb, 26,26,26), 0.75)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
+            background: "var(--nav-bg)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
             borderBottom: "1px solid var(--border)",
           }}
         >
@@ -71,7 +71,7 @@ export default function NavBar() {
               className="text-sm font-light tracking-[0.3em] uppercase transition-opacity duration-300 hover:opacity-60"
               style={{ fontFamily: "'Cormorant Garamond', serif", color: "var(--fg)" }}
             >
-              Д&С
+              D & S
             </button>
 
             {/* Desktop nav */}

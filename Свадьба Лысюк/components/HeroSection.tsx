@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import RevealText from "./RevealText";
 
 export default function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -65,15 +66,21 @@ export default function HeroSection() {
         </motion.p>
 
         {/* Main headline */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", fontWeight: 300,
-            fontSize: "clamp(3rem, 9vw, 7rem)", color: "#f8f5f0", lineHeight: 0.95, letterSpacing: "-0.01em" }}
+        <RevealText
+          as="h1"
+          delay={0.3}
+          duration={1.4}
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: "italic",
+            fontWeight: 300,
+            fontSize: "clamp(3rem, 9vw, 7rem)",
+            color: "#f8f5f0",
+            lineHeight: 0.95,
+          }}
         >
           Мы женимся!
-        </motion.h1>
+        </RevealText>
 
         {/* Names */}
         <motion.div

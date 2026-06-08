@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { MapPin, Navigation, ExternalLink } from "lucide-react";
 import Image from "next/image";
+import RevealText from "./RevealText";
 
 const VENUE = {
   name: "Особняк",
@@ -72,10 +73,14 @@ export default function LocationSection() {
             style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
             Место проведения
           </p>
-          <h2 className="text-[clamp(2.5rem,5vw,5rem)] leading-[0.95]"
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, color: "var(--fg)" }}>
+          <RevealText
+            as="h2"
+            delay={0.1}
+            className="text-[clamp(2.5rem,5vw,5rem)] leading-[0.95]"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, color: "var(--fg)" }}
+          >
             Где это<br /><span style={{ fontStyle: "italic" }}>будет</span>
-          </h2>
+          </RevealText>
         </motion.div>
 
         {/* Glass card — only left half */}

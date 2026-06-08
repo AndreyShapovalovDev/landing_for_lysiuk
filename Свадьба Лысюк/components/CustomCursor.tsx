@@ -13,7 +13,9 @@ export default function CustomCursor() {
   const springX = useSpring(cursorX, springConfig);
   const springY = useSpring(cursorY, springConfig);
 
-  const isHovering = useRef(false);
+  // Цвет адаптируется под тему через CSS переменные
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef  = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
@@ -23,37 +25,33 @@ export default function CustomCursor() {
       dotY.set(e.clientY - 3);
     };
 
-    const onEnter = () => { isHovering.current = true; };
-    const onLeave = () => { isHovering.current = false; };
-
     window.addEventListener("mousemove", move);
-
-    const interactives = document.querySelectorAll("a, button, [data-hover]");
-    interactives.forEach(el => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
-
-    return () => {
-      window.removeEventListener("mousemove", move);
-      interactives.forEach(el => {
-        el.removeEventListener("mouseenter", onEnter);
-        el.removeEventListener("mouseleave", onLeave);
-      });
-    };
+    return () => window.removeEventListener("mousemove", move);
   }, [cursorX, cursorY, dotX, dotY]);
 
   return (
     <>
       {/* Outer ring */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-ivory/50 rounded-full pointer-events-none z-[9998] mix-blend-difference"
-        style={{ x: springX, y: springY }}
+        ref={ringRef}
+        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9998]"
+        style={{
+          x: springX,
+          y: springY,
+          border: "1px solid var(--cursor-ring)",
+          boxShadow: "0 0 0 0.5px var(--cursor-shadow)",
+        }}
       />
       {/* Inner dot */}
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-ivory rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        style={{ x: dotX, y: dotY }}
+        ref={dotRef}
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full pointer-events-none z-[9999]"
+        style={{
+          x: dotX,
+          y: dotY,
+          background: "var(--cursor-dot)",
+          boxShadow: "0 0 0 0.5px var(--cursor-shadow)",
+        }}
       />
     </>
   );

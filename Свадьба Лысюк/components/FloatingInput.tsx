@@ -36,29 +36,33 @@ export default function FloatingInput({
 
   return (
     <div style={{ position: "relative", paddingTop: 0 }}>
-      {/* Floating label */}
-      <motion.label
-        animate={{
-          y:        lifted ? -6  : 16,
-          fontSize: lifted ? "9px" : "1rem",
-          opacity:  lifted ? 1 : 0.45,
-          letterSpacing: lifted ? "0.35em" : "0",
-          color: focused ? "var(--fg)" : "var(--fg-30)",
-        }}
-        transition={{ duration: 0.3, ease: E }}
+      {/* Floating label — CSS transitions, без Framer Motion initial */}
+      <label
         style={{
           position: "absolute",
           left: 0,
           top: 0,
           fontFamily: "'Inter', sans-serif",
-          textTransform: lifted ? "uppercase" : "none",
           fontWeight: 300,
           pointerEvents: "none",
           transformOrigin: "left top",
+          transform: `translateY(${lifted ? -6 : 16}px)`,
+          fontSize: lifted ? "9px" : "1rem",
+          opacity: lifted ? 1 : 0.45,
+          letterSpacing: lifted ? "0.35em" : "0",
+          textTransform: lifted ? "uppercase" : "none",
+          color: focused ? "var(--fg)" : "var(--fg-30)",
+          transition: [
+            "transform 0.28s cubic-bezier(0.16,1,0.3,1)",
+            "font-size 0.28s cubic-bezier(0.16,1,0.3,1)",
+            "opacity 0.28s ease",
+            "letter-spacing 0.28s ease",
+            "color 0.28s ease",
+          ].join(", "),
         }}
       >
         {label}{required ? " *" : ""}
-      </motion.label>
+      </label>
 
       {/* Input */}
       {multiline ? (
@@ -82,7 +86,7 @@ export default function FloatingInput({
         />
       )}
 
-      {/* Bottom border — статичная подложка */}
+      {/* Bottom border — подложка */}
       <div style={{
         position: "absolute",
         bottom: 0, left: 0, right: 0,

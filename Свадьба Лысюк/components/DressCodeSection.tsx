@@ -2,15 +2,15 @@
 
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
-// TODO: уточнить финальные цвета с молодожёнами
 const palette = [
-  { name: "Молочный",        hex: "#F5F0E8", note: "Основной" },
-  { name: "Слоновая кость",  hex: "#E8DFD0", note: "" },
-  { name: "Бежевый",         hex: "#C8B89A", note: "" },
-  { name: "Тауп",            hex: "#8A7B6C", note: "" },
-  { name: "Тёмно-шоколадный",hex: "#3A2E28", note: "" },
-  { name: "Чёрный",          hex: "#1A1A1A", note: "Доступный" },
+  { name: "Молочный",         hex: "#F5F0E8", note: "Основной" },
+  { name: "Слоновая кость",   hex: "#E8DFD0", note: "" },
+  { name: "Бежевый",          hex: "#C8B89A", note: "" },
+  { name: "Тауп",             hex: "#8A7B6C", note: "" },
+  { name: "Тёмно-шоколадный", hex: "#3A2E28", note: "" },
+  { name: "Чёрный",           hex: "#1A1A1A", note: "Доступный" },
 ];
 
 function WordReveal({ text, delay = 0, style }: { text: string; delay?: number; style?: React.CSSProperties }) {
@@ -34,6 +34,28 @@ function WordReveal({ text, delay = 0, style }: { text: string; delay?: number; 
   );
 }
 
+function PalettePhoto() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+  return (
+    <div ref={ref} className="relative overflow-hidden rounded-sm" style={{ minHeight: 480 }}>
+      <motion.div className="absolute inset-[-12%] w-[124%] h-[124%]" style={{ y }}>
+        <Image
+          src="/palette.jpg"
+          alt="Атмосфера торжества"
+          fill
+          className="object-cover object-center"
+          style={{ filter: "brightness(0.88) saturate(0.85)" }}
+        />
+      </motion.div>
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.35) 100%)" }} />
+    </div>
+  );
+}
+
 export default function DressCodeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -50,13 +72,14 @@ export default function DressCodeSection() {
     >
       <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10"
         style={{ background: "linear-gradient(to bottom, var(--bg-3), transparent)" }} />
-      <div className="relative max-w-5xl mx-auto">
+
+      <div className="relative max-w-6xl mx-auto">
 
         {/* Heading */}
         <motion.div
           ref={ref}
           style={{ scale: headingScale, y: headingY }}
-          className="mb-16 md:mb-24"
+          className="mb-16 md:mb-20"
         >
           <motion.p
             initial={{ opacity: 0 }}
@@ -84,52 +107,65 @@ export default function DressCodeSection() {
             }}
           >
             <WordReveal
-              text="Нам будет особенно приятно, если вы поддержите цветовую гамму нашей свадьбы в своих нарядах. Вдохновение для образов — нейтральные, тёплые и землистые тона."
+              text="Нам будет особенно приятно, если вы поддержите цветовую гамму нашей свадьбы. Вдохновение — нейтральные, тёплые и землистые тона."
               delay={0.2}
             />
           </p>
         </motion.div>
 
-        {/* Color palette */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
-          {palette.map((color, i) => (
-            <motion.div
-              key={color.hex}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 1, delay: 0.1 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col gap-3 group cursor-default"
-            >
-              {/* Swatch */}
-              <div
-                className="w-full aspect-square md:aspect-[3/4] rounded-sm transition-transform duration-500 group-hover:scale-[1.03]"
-                style={{ backgroundColor: color.hex }}
-              />
-              {/* Label */}
-              <div className="flex flex-col gap-0.5">
-                <span
-                  className="text-[9px] tracking-[0.15em] uppercase font-light"
-                  style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-50)" }}
-                >
-                  {color.name}
-                </span>
-                {color.note && (
+        {/* Photo + palette */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+
+          {/* Photo left */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <PalettePhoto />
+          </motion.div>
+
+          {/* Swatches right */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.2, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="grid grid-cols-3 gap-3 md:gap-4 lg:pt-4"
+          >
+            {palette.map((color, i) => (
+              <motion.div
+                key={color.hex}
+                initial={{ opacity: 0, y: 30 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 1, delay: 0.3 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col gap-3 group cursor-default"
+              >
+                <div
+                  className="w-full aspect-[3/4] rounded-sm transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={{ backgroundColor: color.hex }}
+                />
+                <div className="flex flex-col gap-0.5">
                   <span
-                    className="text-[8px] tracking-[0.1em] uppercase"
-                    style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}
+                    className="text-[9px] tracking-[0.15em] uppercase font-light"
+                    style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-50)" }}
                   >
-                    {color.note}
+                    {color.name}
                   </span>
-                )}
-                <span
-                  className="font-mono text-[8px] mt-0.5"
-                  style={{ color: "var(--fg-15)" }}
-                >
-                  {color.hex}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+                  {color.note && (
+                    <span
+                      className="text-[8px] tracking-[0.1em] uppercase"
+                      style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}
+                    >
+                      {color.note}
+                    </span>
+                  )}
+                  <span className="font-mono text-[8px] mt-0.5" style={{ color: "var(--fg-15)" }}>
+                    {color.hex}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
 
         {/* Bottom line */}

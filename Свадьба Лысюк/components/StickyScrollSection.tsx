@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const E: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -13,8 +13,6 @@ const phrases = [
 
 function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: false, margin: "-15% 0px -15% 0px" });
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -67,8 +65,7 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
           lineHeight: 0.85,
           letterSpacing: "-0.05em",
           color: "var(--fg)",
-          opacity: inView ? 1 : 0,
-          transition: "opacity 1s ease",
+          opacity: 1,
           userSelect: "none",
           pointerEvents: "none",
           WebkitMaskImage: phrase.side === "left"
@@ -97,48 +94,40 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
             fontWeight: 300,
             marginBottom: "clamp(1.5rem, 4vw, 3rem)",
           }}
-          animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ duration: 0.8, delay: 0.05 }}
         >
           {phrase.eyebrow}
         </motion.p>
 
-        {/* Line 1 — средний слой */}
-        <motion.div style={{ y: line1Y, overflow: "hidden" }}>
-          <motion.div
-            animate={{ y: inView ? "0%" : "108%" }}
-            transition={{ duration: 0.9, delay: 0.08, ease: E }}
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontStyle: "italic",
-              fontSize: "clamp(3.5rem, 14vw, 13rem)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.03em",
-              color: "var(--fg)",
-            }}
-          >
-            {phrase.line1}
-          </motion.div>
+        {/* Line 1 */}
+        <motion.div
+          style={{
+            y: line1Y,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontStyle: "italic",
+            fontSize: "clamp(3.5rem, 14vw, 13rem)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.03em",
+            color: "var(--fg)",
+          }}
+        >
+          {phrase.line1}
         </motion.div>
 
-        {/* Line 2 — быстрый слой — создаёт разрыв глубины */}
-        <motion.div style={{ y: line2Y, overflow: "hidden" }}>
-          <motion.div
-            animate={{ y: inView ? "0%" : "108%" }}
-            transition={{ duration: 0.9, delay: 0.18, ease: E }}
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontStyle: "italic",
-              fontSize: "clamp(3.5rem, 14vw, 13rem)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.03em",
-              color: "var(--fg-30)",
-            }}
-          >
-            {phrase.line2}
-          </motion.div>
+        {/* Line 2 */}
+        <motion.div
+          style={{
+            y: line2Y,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontStyle: "italic",
+            fontSize: "clamp(3.5rem, 14vw, 13rem)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.03em",
+            color: "var(--fg-30)",
+          }}
+        >
+          {phrase.line2}
         </motion.div>
       </div>
     </div>

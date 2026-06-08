@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import RingGame from "@/components/RingGame";
+import RevealText from "./RevealText";
 
 export default function FinalSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -19,21 +20,28 @@ export default function FinalSection() {
     >
       {/* Background */}
       <motion.div className="absolute inset-0 w-full h-full" style={{ y: bgY }}>
+        <motion.div
+          className="absolute inset-0 w-full h-[120%]"
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1.0 }}
+          transition={{ duration: 24, ease: "linear" }}
+        >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/final.jpg"
           alt=""
-          className="w-full h-[120%] object-cover object-center"
+          className="w-full h-full object-cover object-center"
           style={{ filter: "grayscale(60%) brightness(0.5)" }}
         />
+        </motion.div>
         <div
           className="absolute inset-0"
           style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.82) 100%)" }}
         />
         <div className="absolute top-0 left-0 right-0 h-48"
-          style={{ background: "linear-gradient(to bottom, var(--bg), transparent)", transition: "background 0.65s ease" }} />
+          style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-48"
-          style={{ background: "linear-gradient(to top, var(--bg), transparent)", transition: "background 0.65s ease" }} />
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent)" }} />
       </motion.div>
 
       {/* Content */}
@@ -52,17 +60,20 @@ export default function FinalSection() {
           </span>
         </motion.div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.3, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.2] mb-8 max-w-2xl mx-auto"
-          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: "italic", color: "rgba(248,245,240,0.9)" }}
-        >
-          Для нас огромное счастье —
-          <br />
-          видеть вас рядом в этот день
-        </motion.h2>
+        <div className="mb-8 max-w-2xl mx-auto">
+          <RevealText
+            as="h2"
+            delay={0.2}
+            duration={1.3}
+            once={false}
+            className="text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.2]"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: "italic", color: "rgba(248,245,240,0.9)" }}
+          >
+            Для нас огромное счастье —
+            <br />
+            видеть вас рядом в этот день
+          </RevealText>
+        </div>
 
         <motion.div
           initial={{ scaleX: 0 }}

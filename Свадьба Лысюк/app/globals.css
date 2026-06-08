@@ -9,6 +9,10 @@
 ══════════════════════════════════════ */
 :root,
 [data-theme="dark"] {
+  --nav-bg:        rgba(20,20,20,0.82);
+  --cursor-ring:   rgba(248,245,240,0.55);
+  --cursor-dot:    rgba(248,245,240,0.9);
+  --cursor-shadow: rgba(0,0,0,0.2);
   --bg:           #1a1a1a;
   --bg-2:         #161616;
   --bg-3:         #111111;
@@ -27,6 +31,10 @@
    LIGHT THEME
 ══════════════════════════════════════ */
 [data-theme="light"] {
+  --nav-bg:        rgba(240,235,230,0.85);
+  --cursor-ring:   rgba(26,26,26,0.4);
+  --cursor-dot:    rgba(26,26,26,0.85);
+  --cursor-shadow: rgba(255,255,255,0.3);
   --bg:           #f5f0eb;
   --bg-2:         #ede8e1;
   --bg-3:         #e5dfd7;

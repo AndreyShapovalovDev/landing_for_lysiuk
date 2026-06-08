@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import RevealText from "./RevealText";
 
 const WEDDING_DATE = new Date("2026-09-07T16:00:00");
 
@@ -97,15 +98,15 @@ export default function CountdownSection() {
       </div>
 
       <div className="relative px-8 md:px-16">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9 }}
+        <RevealText
+          as="p"
+          delay={0}
+          duration={0.9}
           className="text-[10px] tracking-[0.45em] uppercase mb-16 md:mb-20 font-light text-center"
           style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}
         >
           До особого дня
-        </motion.p>
+        </RevealText>
 
         {/* Desktop: дни большие слева, остальные справа меньше */}
         <div className="hidden sm:flex items-end justify-center gap-12 md:gap-20">
