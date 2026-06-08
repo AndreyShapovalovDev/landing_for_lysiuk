@@ -4,22 +4,42 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import RingGame from "@/components/RingGame";
 
+const E: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 function LetterStagger({ text, inView, delay = 0, style }: {
   text: string; inView: boolean; delay?: number; style?: React.CSSProperties;
 }) {
+  const words = text.split(" ");
+  let charCount = 0;
+
   return (
     <span style={{ display: "inline" }}>
-      {text.split("").map((ch, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-          animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-          transition={{ duration: 0.65, delay: delay + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-          style={{ display: ch === " " ? "inline" : "inline-block", ...style }}
-        >
-          {ch === " " ? " " : ch}
-        </motion.span>
-      ))}
+      {words.map((word, wi) => {
+        const wordOffset = charCount;
+        charCount += word.length + 1;
+        return (
+          <span
+            key={wi}
+            style={{
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              marginRight: wi < words.length - 1 ? "0.28em" : 0,
+            }}
+          >
+            {word.split("").map((ch, ci) => (
+              <motion.span
+                key={ci}
+                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+                transition={{ duration: 0.65, delay: delay + (wordOffset + ci) * 0.04, ease: E }}
+                style={{ display: "inline-block", ...style }}
+              >
+                {ch}
+              </motion.span>
+            ))}
+          </span>
+        );
+      })}
     </span>
   );
 }
@@ -69,10 +89,9 @@ export default function FinalSection() {
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.6, ease: E }}
           className="mb-12 relative flex items-center justify-center"
         >
-          {/* Halo */}
           <motion.div
             className="absolute rounded-full pointer-events-none"
             style={{ width: 180, height: 180, background: "radial-gradient(circle, rgba(248,245,240,0.08) 0%, transparent 70%)" }}
@@ -94,7 +113,7 @@ export default function FinalSection() {
 
         <div className="mb-8 max-w-2xl mx-auto">
           <h2
-            className="text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.2]"
+            className="text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.4]"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: "italic", color: "rgba(248,245,240,0.9)" }}
           >
             <LetterStagger text="Для нас огромное счастье —" inView={inView} delay={0.5} />
@@ -106,7 +125,7 @@ export default function FinalSection() {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : {}}
-          transition={{ duration: 1.4, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.4, delay: 0.4, ease: E }}
           className="flex items-center justify-center gap-6 mb-8"
           style={{ originX: 0.5 }}
         >
@@ -130,7 +149,6 @@ export default function FinalSection() {
           Данил & Софья
         </motion.p>
 
-        {/* Easter egg */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
