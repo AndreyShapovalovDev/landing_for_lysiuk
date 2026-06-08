@@ -5,6 +5,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { MapPin, Navigation, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import RevealText from "./RevealText";
+import MagneticButton from "./MagneticButton";
 
 const VENUE = {
   name: "Особняк",
@@ -132,14 +133,16 @@ export default function LocationSection() {
                 fontSize: "1.05rem", lineHeight: "1.75", color: "var(--fg-50)" }}>
               {VENUE.description}
             </p>
-            <a href={VENUE.yandexUrl} target="_blank" rel="noopener noreferrer"
-              className="group flex items-center gap-3 w-fit">
-              <span className="text-xs tracking-[0.25em] uppercase font-light transition-opacity duration-300 group-hover:opacity-60"
-                style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-50)" }}>
-                Открыть в Яндекс Картах
-              </span>
-              <ExternalLink size={12} strokeWidth={1.5} style={{ color: "var(--fg-30)" }} />
-            </a>
+            <MagneticButton strength={0.2}>
+              <a href={VENUE.yandexUrl} target="_blank" rel="noopener noreferrer"
+                className="group flex items-center gap-3">
+                <span className="text-xs tracking-[0.25em] uppercase font-light transition-opacity duration-300 group-hover:opacity-60"
+                  style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-50)" }}>
+                  Открыть в Яндекс Картах
+                </span>
+                <ExternalLink size={12} strokeWidth={1.5} style={{ color: "var(--fg-30)" }} />
+              </a>
+            </MagneticButton>
           </div>
         </motion.div>
       </motion.div>

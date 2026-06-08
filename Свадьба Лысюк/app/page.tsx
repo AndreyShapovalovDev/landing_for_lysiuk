@@ -1,5 +1,6 @@
 import ClientCursor from "@/components/ClientCursor";
 import LoadingScreen from "@/components/LoadingScreen";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
 import MusicPlayer from "@/components/MusicPlayer";
 import NavBar from "@/components/NavBar";
 import HeroSection from "@/components/HeroSection";
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <>
       <ClientCursor />
+      <ScrollProgressBar />
       <LoadingScreen />
       <MusicPlayer />
       <NavBar />

@@ -76,11 +76,14 @@ export default function NavBar() {
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-8">
-              {NAV_ITEMS.map(item => (
-                <button
+              {NAV_ITEMS.map((item, i) => (
+                <motion.button
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
-                  className="relative text-[10px] tracking-[0.3em] uppercase font-light transition-all duration-300"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative text-[10px] tracking-[0.3em] uppercase font-light transition-colors duration-300"
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     color: active === item.href.replace("#", "")
@@ -89,7 +92,6 @@ export default function NavBar() {
                   }}
                 >
                   {item.label}
-                  {/* Active indicator */}
                   {active === item.href.replace("#", "") && (
                     <motion.div
                       layoutId="nav-indicator"
@@ -98,7 +100,7 @@ export default function NavBar() {
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
-                </button>
+                </motion.button>
               ))}
             </nav>
 

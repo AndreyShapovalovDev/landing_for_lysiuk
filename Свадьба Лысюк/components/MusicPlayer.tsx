@@ -70,13 +70,18 @@ export default function MusicPlayer() {
               boxShadow: "0 8px 40px rgba(0,0,0,0.3)",
             }}
           >
-            <div className="flex items-center gap-2">
-              <motion.span
-                animate={{ scale: [1, 1.3, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                🎵
-              </motion.span>
+            <div className="flex items-center gap-3">
+              {/* Waveform icon */}
+              <div className="flex items-end gap-[3px]" style={{ height: 14 }}>
+                {[0.5, 1, 0.7, 1, 0.6].map((h, i) => (
+                  <motion.div
+                    key={i}
+                    style={{ width: 2, borderRadius: 1, background: "var(--fg-50)", height: `${h * 14}px` }}
+                    animate={{ scaleY: [h, 1, h * 0.4, 1, h] }}
+                    transition={{ duration: 1.4, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+                  />
+                ))}
+              </div>
               <span
                 className="text-[10px] tracking-[0.25em] uppercase font-light"
                 style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-50)" }}

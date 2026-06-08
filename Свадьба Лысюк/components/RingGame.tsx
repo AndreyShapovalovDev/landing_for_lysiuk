@@ -383,7 +383,7 @@ export default function RingGame() {
         transition={{ duration: 0.8, delay: 0.3 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.96 }}
-        className="flex items-center gap-3 px-6 py-3 rounded-sm"
+        className="flex items-center gap-4 px-6 py-3 rounded-sm"
         style={{
           border: "1px solid rgba(248,245,240,0.15)",
           background: "rgba(248,245,240,0.04)",
@@ -396,7 +396,11 @@ export default function RingGame() {
           backdropFilter: "blur(8px)",
         }}
       >
-        <span>💍</span>
+        {/* Ring SVG */}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ opacity: 0.6 }}>
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+          <circle cx="7" cy="7" r="2" fill="currentColor" opacity="0.4" />
+        </svg>
         <span>Поймай кольцо — мини-игра</span>
       </motion.button>
 

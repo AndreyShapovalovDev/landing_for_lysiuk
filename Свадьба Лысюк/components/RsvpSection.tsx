@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import FloatingInput from "./FloatingInput";
+import MagneticButton from "./MagneticButton";
 
 type AttendingOption = "yes" | "no" | "";
 
@@ -212,21 +213,26 @@ export default function RsvpSection() {
               </motion.div>
 
               {/* Submit */}
-              <motion.button
-                type="submit" disabled={submitting || !name || !attending}
+              <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ scale: 1.005 }} whileTap={{ scale: 0.995 }}
-                className="relative w-full py-4 text-[10px] tracking-[0.35em] uppercase font-light transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden group mt-2"
-                style={{ fontFamily: "'Inter', sans-serif", border: "1px solid var(--border)", color: "var(--fg-50)" }}
+                className="mt-2"
               >
-                <span className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
-                  style={{ background: "var(--fg-08)" }} />
-                <span className="relative">
-                  {submitting ? "Отправляем..." : "Подтвердить присутствие"}
-                </span>
-              </motion.button>
+                <MagneticButton strength={0.12} style={{ width: "100%" }}>
+                  <button
+                    type="submit" disabled={submitting || !name || !attending}
+                    className="relative w-full py-4 text-[10px] tracking-[0.35em] uppercase font-light transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden group"
+                    style={{ fontFamily: "'Inter', sans-serif", border: "1px solid var(--border)", color: "var(--fg-50)" }}
+                  >
+                    <span className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
+                      style={{ background: "var(--fg-08)" }} />
+                    <span className="relative">
+                      {submitting ? "Отправляем..." : "Подтвердить присутствие"}
+                    </span>
+                  </button>
+                </MagneticButton>
+              </motion.div>
             </motion.form>
           ) : (
             <motion.div key="success"

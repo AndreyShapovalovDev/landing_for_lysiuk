@@ -35,9 +35,9 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
   const eyebrowY = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
 
   // Blur-to-focus: в центре (0.5) — фокус, на краях — blur
-  const blurPx = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [16, 0, 0, 0, 16]);
+  const blurPx = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [12, 0, 0, 0, 12]);
   const blurFilter = useMotionTemplate`blur(${blurPx}px)`;
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5, 0.8, 1], [0, 1, 1, 1, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0.4, 1, 1, 1, 0.4]);
 
   return (
     <div

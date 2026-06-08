@@ -210,7 +210,7 @@ export default function CountdownSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.5 }}
-          className="mt-16 md:mt-24 font-light"
+          className="mt-16 md:mt-24 font-light text-center"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", fontSize: "1.15rem", color: "var(--fg-30)" }}
         >
           07 сентября 2026

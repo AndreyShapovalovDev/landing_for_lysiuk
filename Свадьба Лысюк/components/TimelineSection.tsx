@@ -61,7 +61,7 @@ function ScrollLine({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElement
       aria-hidden
       style={{
         position: "absolute",
-        left: "calc(4rem + 1.5rem + 6px)",
+        left: "calc(4rem + 2rem + 6px)",
         top: 6,
         bottom: 80,
         width: 1,
