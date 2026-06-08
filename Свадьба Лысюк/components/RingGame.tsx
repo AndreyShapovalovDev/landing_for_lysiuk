@@ -46,8 +46,7 @@ function GameCanvas({ onScore, onMiss, onClose }: {
 
     // Load Pudge image
     const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/pudge.png";
+    img.src = "/pudzh.jpg";
     img.onload = () => { state.current.pudgeImg = img; };
 
     // Draw ring
@@ -321,7 +320,7 @@ function GameCanvas({ onScore, onMiss, onClose }: {
       {/* Close */}
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full"
+        className="absolute top-20 right-5 w-10 h-10 flex items-center justify-center rounded-full"
         style={{ border: "1px solid rgba(248,245,240,0.2)", color: "rgba(248,245,240,0.5)", fontSize: 20, background: "rgba(0,0,0,0.5)" }}
       >×</button>
 
