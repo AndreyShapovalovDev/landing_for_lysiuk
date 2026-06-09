@@ -237,6 +237,7 @@ export async function POST(req: NextRequest) {
         port: 587,
         secure: false,      // false = STARTTLS (не SSL)
         requireTLS: true,   // обязательно шифрование
+        family: 4,          // принудительно IPv4
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
