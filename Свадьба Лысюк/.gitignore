@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# RSVP data (private guest data)
+data/
+
 # Next.js
 .next/
 out/
