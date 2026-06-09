@@ -245,7 +245,7 @@ export async function POST(req: NextRequest) {
         connectionTimeout: 10000,
         greetingTimeout: 10000,
         socketTimeout: 15000,
-      });
+      } as Parameters<typeof nodemailer.createTransport>[0]);
 
       // Проверяем соединение
       await transporter.verify();
