@@ -1,6 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Cormorant_Garamond, Inter } from "next/font/google";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["200", "300", "400", "500"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Данил & Софья · 07.09.2026",
@@ -36,18 +52,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@200;300;400;500&display=swap"
-          rel="stylesheet"
-        />
         {/* Anti-flash: apply theme before render */}
         <script dangerouslySetInnerHTML={{ __html:
           `(function(){try{var t=localStorage.getItem('wedding-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})()`
         }} />
       </head>
-      <body className="grain-overlay">
+      <body className={`grain-overlay ${cormorant.variable} ${inter.variable}`}>
         <ThemeToggle />
         {children}
       </body>
