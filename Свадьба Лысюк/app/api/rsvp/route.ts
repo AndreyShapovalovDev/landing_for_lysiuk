@@ -251,14 +251,18 @@ export async function POST(req: NextRequest) {
       await transporter.verify();
       console.log("[RSVP] SMTP connection OK on port 587");
 
+      const recipients = [process.env.NOTIFY_EMAIL, process.env.NOTIFY_EMAIL_2]
+        .filter(Boolean)
+        .join(", ");
+
       const info = await transporter.sendMail({
         from:    `"Свадьба Лысюк" <${process.env.SMTP_USER}>`,
-        to:      process.env.NOTIFY_EMAIL,
+        to:      recipients,
         subject: `${isAttending ? "✅" : "❌"} RSVP от ${name}`,
         html:    buildEmailHtml(data),
       });
 
-      console.log("[RSVP] Email sent:", info.messageId, "→", process.env.NOTIFY_EMAIL);
+      console.log("[RSVP] Email sent:", info.messageId, "→", recipients);
     } else {
       console.warn("[RSVP] Email skipped — SMTP vars not set");
     }
