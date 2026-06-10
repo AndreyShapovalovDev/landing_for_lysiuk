@@ -16,9 +16,12 @@ export default function RsvpSection() {
   const [attending, setAttending]   = useState<AttendingOption>("");
   const [guestCount, setGuestCount] = useState("1");
   const [companions, setCompanions] = useState("");
-  const [comment, setComment]       = useState("");
+  const [alcohol, setAlcohol]       = useState<string[]>([]);
   const [submitted, setSubmitted]   = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const toggleAlcohol = (item: string) =>
+    setAlcohol(prev => prev.includes(item) ? prev.filter(x => x !== item) : [...prev, item]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ export default function RsvpSection() {
           attending,
           guestCount,
           companions,
-          comment,
+          alcohol,
           clientMeta: {
             screenSize: `${window.screen.width}×${window.screen.height}`,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -193,24 +196,31 @@ export default function RsvpSection() {
                         </motion.div>
                       )}
                     </AnimatePresence>
+
+                    {/* Алкоголь */}
+                    <div>
+                      <label className={labelClass} style={{ fontFamily: "'Inter', sans-serif", color: "var(--fg-30)" }}>
+                        Что предпочитаете из алкоголя?
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "Коньяк", "Виски", "Водка",
+                          "Вино белое сухое", "Вино белое полусладкое",
+                          "Вино красное сухое", "Вино красное полусладкое",
+                          "Шампанское сухое", "Шампанское сладкое",
+                        ].map(item => (
+                          <button key={item} type="button"
+                            onClick={() => toggleAlcohol(item)}
+                            className="py-2 px-3 text-[10px] tracking-[0.15em] uppercase font-light transition-all duration-250 rounded-sm"
+                            style={btnStyle(alcohol.includes(item))}>
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Пожелания */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <FloatingInput
-                  label="Пожелания молодожёнам"
-                  value={comment}
-                  onChange={setComment}
-                  multiline
-                  rows={3}
-                />
-              </motion.div>
 
               {/* Submit */}
               <motion.div

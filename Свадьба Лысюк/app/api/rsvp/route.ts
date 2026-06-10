@@ -8,7 +8,7 @@ interface RsvpData {
   attending: "yes" | "no";
   guestCount?: string;
   companions?: string;
-  comment?: string;
+  alcohol?: string[];
   submittedAt: string;
   meta: {
     ip: string;
@@ -115,7 +115,7 @@ function buildEmailHtml(data: RsvpData): string {
       ${row("Гость", data.name)}
       ${isAttending ? row("Человек", data.guestCount || "1") : ""}
       ${data.companions ? row("С собой", data.companions) : ""}
-      ${data.comment ? row("Пожелания", `<em style="color:#555">${data.comment}</em>`) : ""}
+      ${data.alcohol?.length ? row("Алкоголь", data.alcohol.join(", ")) : ""}
     </table>
   </div>
 
@@ -189,7 +189,7 @@ function saveToFile(data: RsvpData) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, attending, guestCount, companions, comment, clientMeta } = body;
+    const { name, attending, guestCount, companions, alcohol, clientMeta } = body;
 
     if (!name || !attending) {
       return NextResponse.json({ error: "Заполните обязательные поля" }, { status: 400 });
@@ -203,7 +203,7 @@ export async function POST(req: NextRequest) {
       attending,
       guestCount,
       companions,
-      comment,
+      alcohol,
       submittedAt: new Date().toLocaleString("ru-RU", {
         timeZone: "Europe/Moscow",
         day: "2-digit", month: "long", year: "numeric",

@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 
 const phrases = [
-  { eyebrow: "Начало",         line1: "Мы познакомились", line2: "совсем случайно...",    ambient: "01", side: "left"  as const },
-  { eyebrow: "Момент",         line1: "И поняли —",        line2: "это навсегда",          ambient: "02", side: "right" as const },
-  { eyebrow: "07 · 09 · 2026", line1: "Теперь мы хотим",  line2: "разделить это с вами",  ambient: "03", side: "left"  as const },
+  { eyebrow: "Случай? Нет. Судьба.",    line1: "Один совет —",       line2: "и мы встретились",   ambient: "01", side: "left"  as const },
+  { eyebrow: "Ночь. Садовая. Тишина.",  line1: "Пока город спал —",  line2: "всё стало ясно",     ambient: "02", side: "right" as const },
+  { eyebrow: "07 · 09 · 2026",          line1: "Семь лет вместе —",  line2: "теперь навсегда",    ambient: "03", side: "left"  as const },
 ];
 
 function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
