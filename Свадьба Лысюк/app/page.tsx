@@ -4,7 +4,7 @@ import ScrollProgressBar from "@/components/ScrollProgressBar";
 import MusicPlayer from "@/components/MusicPlayer";
 import NavBar from "@/components/NavBar";
 import HeroSection from "@/components/HeroSection";
-import StickyScrollSection from "@/components/StickyScrollSection";
+
 import TimelineSection from "@/components/TimelineSection";
 import LocationSection from "@/components/LocationSection";
 import CountdownSection from "@/components/CountdownSection";
@@ -22,7 +22,6 @@ export default function Home() {
       <NavBar />
       <main>
         <HeroSection />
-        <StickyScrollSection />
         <TimelineSection />
         <LocationSection />
         <CountdownSection />
