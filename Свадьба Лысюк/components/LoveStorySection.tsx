@@ -1,20 +1,16 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import Image from "next/image";
 import { ExternalLink, Camera } from "lucide-react";
 
 const MAX_GROUP_URL = "https://max.ru/";
 
-// Все 6 фото — все вертикальные 1280×1707 (portrait 3:4)
+// Фото истории — добавь story-1.webp … story-6.webp в public/photos/ когда будут готовы
 const photos = [
-  { src: "/photos/story-1.webp", aspect: "portrait", delay: 0    },
-  { src: "/photos/story-2.webp", aspect: "portrait", delay: 0.08 },
-  { src: "/photos/story-3.webp", aspect: "portrait", delay: 0.16 },
-  { src: "/photos/story-4.webp", aspect: "portrait", delay: 0.24 },
-  { src: "/photos/story-5.webp", aspect: "portrait", delay: 0.12 },
-  { src: "/photos/story-6.webp", aspect: "portrait", delay: 0.2  },
+  { src: "/photos/1.jpeg", aspect: "portrait", delay: 0    },
+  { src: "/photos/2.jpeg", aspect: "portrait", delay: 0.12 },
 ];
 
 const aspectMap: Record<string, string> = {
@@ -441,16 +437,26 @@ function PhotoCard({
   index,
   onHook,
   disabled,
+  depth,
+  mouseX,
+  mouseY,
 }: {
   photo: typeof photos[0];
   index: number;
   onHook: (rect: DOMRect) => void;
   disabled: boolean;
+  depth: number;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
 }) {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [caught, setCaught] = useState(false);
   const [toast,  setToast]  = useState(false);
+
+  // Hover-parallax: each card shifts by depth * 6px max
+  const shiftX = useTransform(mouseX, [0, 1], [-depth * 6, depth * 6]);
+  const shiftY = useTransform(mouseY, [0, 1], [-depth * 4, depth * 4]);
 
   const handleClick = () => {
     if (disabled || !ref.current) return;
@@ -470,6 +476,11 @@ function PhotoCard({
       onClick={handleClick}
       title={disabled ? "" : "Кликни — Пудж придёт"}
     >
+      {/* Parallax wrapper — shifts on mouse move */}
+      <motion.div
+        style={{ x: shiftX, y: shiftY, position: "absolute", inset: 0 }}
+        transition={{ type: "spring", stiffness: 60, damping: 20 }}
+      >
       <motion.div
         className="absolute inset-0 overflow-hidden"
         animate={caught
@@ -528,6 +539,7 @@ function PhotoCard({
           </motion.div>
         )}
       </AnimatePresence>
+      </motion.div> {/* end parallax wrapper */}
     </motion.div>
   );
 }
@@ -536,9 +548,26 @@ function PhotoCard({
 export default function LoveStorySection() {
   const headingRef    = useRef<HTMLDivElement>(null);
   const headingInView = useInView(headingRef, { once: true, margin: "-60px" });
+  const sectionRef    = useRef<HTMLElement>(null);
 
   const [hookState, setHookState] = useState<HookState>({ phase: "idle", tx: 0, ty: 0 });
   const busy = hookState.phase !== "idle";
+
+  // Mouse-tracking for hover parallax (desktop only)
+  const rawMouseX = useMotionValue(0.5);
+  const rawMouseY = useMotionValue(0.5);
+  const mouseX = useSpring(rawMouseX, { stiffness: 55, damping: 18 });
+  const mouseY = useSpring(rawMouseY, { stiffness: 55, damping: 18 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    rawMouseX.set((e.clientX - rect.left) / rect.width);
+    rawMouseY.set((e.clientY - rect.top)  / rect.height);
+  };
+  const handleMouseLeave = () => {
+    rawMouseX.set(0.5);
+    rawMouseY.set(0.5);
+  };
 
   const fireHook = useCallback((rect: DOMRect) => {
     if (busy) return;
@@ -556,7 +585,12 @@ export default function LoveStorySection() {
   }, [busy]);
 
   return (
-    <section className="relative py-32 md:py-48 px-8 md:px-16 lg:px-24 bg-section overflow-visible">
+    <section
+      ref={sectionRef}
+      className="relative py-32 md:py-48 px-8 md:px-16 lg:px-24 bg-section overflow-visible"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
 
       <PudgeScene hook={hookState} />
 
@@ -593,7 +627,16 @@ export default function LoveStorySection() {
       {/* Masonry grid — 6 фото */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 max-w-6xl mx-auto">
         {photos.map((photo, i) => (
-          <PhotoCard key={i} photo={photo} index={i} onHook={fireHook} disabled={busy} />
+          <PhotoCard
+            key={i}
+            photo={photo}
+            index={i}
+            onHook={fireHook}
+            disabled={busy}
+            depth={0.6 + (i % 3) * 0.4}
+            mouseX={mouseX}
+            mouseY={mouseY}
+          />
         ))}
       </div>
 

@@ -16,7 +16,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
     offset: ["start end", "end start"],
   });
 
-  // Ambient число — сильный горизонтальный drift + вертикальный + scale
   const ambientX = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
@@ -25,14 +24,10 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
   const ambientY     = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   const ambientScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.82, 1.0, 0.82]);
 
-  // Текст — line1 движется чуть быстрее чем line2 (разная глубина)
   const line1Y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
   const line2Y = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
-
-  // Eyebrow — самый медленный слой
   const eyebrowY = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
 
-  // Blur-to-focus: в центре (0.5) — фокус, на краях — blur
   const blurPx = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [12, 0, 0, 0, 12]);
   const blurFilter = useMotionTemplate`blur(${blurPx}px)`;
   const contentOpacity = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0.4, 1, 1, 1, 0.4]);
@@ -50,7 +45,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
         overflow: "hidden",
       }}
     >
-      {/* Ambient число — scroll-linked drift + scale */}
       <motion.div
         aria-hidden
         style={{
@@ -82,7 +76,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
         {phrase.ambient}
       </motion.div>
 
-      {/* Content — три слоя с разной скоростью */}
       <motion.div
         style={{
           textAlign: "center",
@@ -93,8 +86,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
           opacity: contentOpacity,
         }}
       >
-
-        {/* Eyebrow — медленный слой */}
         <motion.p
           style={{
             y: eyebrowY,
@@ -110,7 +101,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
           {phrase.eyebrow}
         </motion.p>
 
-        {/* Line 1 */}
         <motion.div
           style={{
             y: line1Y,
@@ -126,7 +116,6 @@ function PhraseBlock({ phrase }: { phrase: typeof phrases[0] }) {
           {phrase.line1}
         </motion.div>
 
-        {/* Line 2 */}
         <motion.div
           style={{
             y: line2Y,

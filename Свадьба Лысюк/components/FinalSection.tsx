@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import RingGame from "@/components/RingGame";
 
@@ -65,12 +66,14 @@ export default function FinalSection() {
           animate={{ scale: 1.0 }}
           transition={{ duration: 24, ease: "linear" }}
         >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/final.jpg"
           alt=""
-          className="w-full h-full object-cover object-center"
+          fill
+          loading="lazy"
+          className="object-cover object-center"
           style={{ filter: "grayscale(60%) brightness(0.5)" }}
+          sizes="100vw"
         />
         </motion.div>
         <div

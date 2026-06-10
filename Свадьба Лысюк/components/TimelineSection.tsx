@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
 import RevealText from "./RevealText";
 
 const events = [
@@ -53,25 +53,43 @@ function ScrollLine({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElement
     target: sectionRef,
     offset: ["start 0.7", "end 0.8"],
   });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 24 });
-  const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
+  const smooth     = useSpring(scrollYProgress, { stiffness: 80, damping: 24 });
+  // strokeDashoffset goes 1→0 as the line "draws" from top to bottom
+  const dashOffset = useTransform(smooth, [0, 1], [1, 0]) as MotionValue<number>;
 
   return (
-    <motion.div
+    <div
       aria-hidden
       style={{
         position: "absolute",
-        left: "calc(4rem + 2rem + 6px)",
+        left: "calc(4rem + 2rem + 5.5px)",
         top: 6,
         bottom: 80,
-        width: 1,
-        background: "var(--fg-30)",
-        originY: 0,
-        scaleY,
+        width: 2,
         zIndex: 0,
         pointerEvents: "none",
       }}
-    />
+    >
+      <svg
+        width="2"
+        height="100%"
+        viewBox="0 0 2 100"
+        preserveAspectRatio="none"
+        style={{ display: "block", overflow: "visible" }}
+      >
+        <motion.line
+          x1="1" y1="0"
+          x2="1" y2="100"
+          stroke="var(--fg-30)"
+          strokeWidth="1"
+          pathLength="1"
+          strokeDasharray="1"
+          strokeDashoffset={dashOffset}
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
   );
 }
 

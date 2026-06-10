@@ -12,9 +12,10 @@ export default function HeroSection() {
   const loaded = useIsLoaded();
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const bgY     = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const textY   = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const bgY           = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const textY         = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity       = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const bottomFadeOp  = useTransform(scrollYProgress, [0.15, 0.6], [0, 1]);
 
   return (
     <section ref={ref} className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -38,6 +39,15 @@ export default function HeroSection() {
         <div className="absolute inset-0" style={{
           background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.95) 100%)"
         }} />
+
+        {/* Scroll-linked crossfade: reveals next section background colour */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none"
+          style={{
+            background: "linear-gradient(to top, var(--bg), transparent)",
+            opacity: bottomFadeOp,
+          }}
+        />
       </motion.div>
 
       {/* Text content */}
