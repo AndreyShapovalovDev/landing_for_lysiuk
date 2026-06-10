@@ -7,7 +7,7 @@
 npm install
 
 # 2. Запустить dev-сервер
-npm run dev
+npm run dev   
 
 # 3. Открыть в браузере
 # http://localhost:3000
